@@ -5,6 +5,12 @@
     align-items: center;
 }
 
+.interface {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
 .survivor {
     padding: 20px;
     background-color: var(--black);

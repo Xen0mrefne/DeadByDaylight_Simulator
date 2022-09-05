@@ -82,6 +82,8 @@ candidates.forEach(candidate => {
         $heal.classList.add('btn')
         $heal.classList.add('btn-green')
 
+        $loop.setAttribute("disabled", "true")
+
         $repair.innerHTML = "Find/Repair Generator"
         $loop.innerHTML = "Run/Loop Killer"
         $heal.innerHTML = "Heal"

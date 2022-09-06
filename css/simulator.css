@@ -50,3 +50,9 @@
 .survivor .options > button {
     margin: 3px 0px;
 }
+
+.survivor .options > button:disabled {
+    border: solid 3px var(--gray);
+    color: var(--gray);
+    pointer-events: none;
+}

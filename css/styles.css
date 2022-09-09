@@ -6,12 +6,19 @@
     --black: hsl(0, 0%, 10%);
     --red: rgb(255, 120, 120);
     --orange: rgb(255, 180, 120);
+    --yellow: rgb(255, 255, 120);
     --green: rgb(120, 255, 120);
+    --cyan: rgb(120, 255, 255);
     --blue: rgb(120, 120, 255);
+    --pink: rgb(255, 120, 255);
+    --black-opacity: hsla(0, 0%, 10%, 0.4);
     --red-opacity: rgba(255, 120, 120, 0.4);
     --orange-opacity: rgba(255, 180, 120, 0.4);
+    --yellow-opacity: rgba(255, 255, 120, 0.4);
     --green-opacity: rgba(120, 255, 120, 0.4);
+    --cyan-opacity: rgba(120, 255, 255, 0.4);
     --blue-opacity: rgba(120, 120, 255, 0.4);
+    --pink-opacity: rgba(255, 120, 255, 0.4);
 }
 
 /* _-_-RESET-_-_ */
@@ -48,6 +55,15 @@ body {
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.btn-black {
+    color: var(--black);
+    border: 2px solid var(--black);
+}
+
+.btn-black:hover {
+    background-color: var(--black-opacity);
 }
 
 .btn-red {

@@ -27,17 +27,19 @@ class Survivor {
     }
 }
 
-const survivors = [];
-let $fragment = document.createDocumentFragment();
+const start = () => {
 
-candidates.forEach(candidate => {
+    const survivors = [];
+    let $fragment = document.createDocumentFragment();
 
-    let $survivor = document.createElement('div');
-        $survivor.classList.add('survivor')
+    candidates.forEach(candidate => {
 
-    let $objective = document.createElement('div'),
-        $action = document.createElement('span'),
-        $progress = document.createElement('span');
+        let $survivor = document.createElement('div');
+            $survivor.classList.add('survivor')
+
+        let $objective = document.createElement('div'),
+            $action = document.createElement('span'),
+            $progress = document.createElement('span');
 
         $objective.classList.add('objective')
         $action.classList.add('action')
@@ -50,26 +52,26 @@ candidates.forEach(candidate => {
         $objective.appendChild($progress)
 
 
-    let $status = document.createElement('div'),
-        $portrait = document.createElement('img'),
-        $survivorName = document.createElement('p');
+        let $status = document.createElement('div'),
+            $portrait = document.createElement('img'),
+            $survivorName = document.createElement('p');
 
         $status.classList.add('status')
         $portrait.classList.add('portrait')
         $survivorName.classList.add('survivor-name')
 
-        $portrait.setAttribute('src', candidate.img)
-        $survivorName.innerHTML = `${candidate.name} (<span class="health"></span>)`;
-    let $survivorHealth = $survivorName.querySelector('.health')
-        $survivorHealth.innerHTML = "healthy"
+            $portrait.setAttribute('src', candidate.img)
+            $survivorName.innerHTML = `${candidate.name} (<span class="health"></span>)`;
+        let $survivorHealth = $survivorName.querySelector('.health')
+            $survivorHealth.innerHTML = "healthy"
 
         $status.appendChild($portrait)
         $status.appendChild($survivorName)
 
-    let $options = document.createElement('div'),
-        $repair = document.createElement('button'),
-        $loop = document.createElement('button'),
-        $heal = document.createElement('button');
+        let $options = document.createElement('div'),
+            $repair = document.createElement('button'),
+            $loop = document.createElement('button'),
+            $heal = document.createElement('button');
 
         $options.classList.add('options')
         $repair.classList.add('repair')
@@ -92,18 +94,26 @@ candidates.forEach(candidate => {
         $options.appendChild($repair)
         $options.appendChild($loop)
         $options.appendChild($heal)
+        
+
+        $survivor.appendChild($objective);
+        $survivor.appendChild($status);
+        $survivor.appendChild($options);
+
+        $fragment.appendChild($survivor)
+
+        let survi = new Survivor(candidate.name, candidate.img, $survivor);
+        survivors.push(survi);
+    })
+
+    const $interface = document.querySelector('.interface')
     
+    $start.style.display = "none";
 
-    $survivor.appendChild($objective);
-    $survivor.appendChild($status);
-    $survivor.appendChild($options);
+    $interface.appendChild($fragment)
 
-    $fragment.appendChild($survivor)
+}
 
-    let survi = new Survivor(candidate.name, candidate.img, $survivor);
-    survivors.push(survi);
-})
+const $start = document.querySelector('.start')
 
-const $interface = document.querySelector('.interface')
-
-$interface.appendChild($fragment)
+$start.addEventListener('click', function(){start()})

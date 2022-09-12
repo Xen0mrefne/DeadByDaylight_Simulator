@@ -27,92 +27,163 @@ class Survivor {
     }
 }
 
-const start = () => {
+class Generator {
+    constructor(capacity, element) {
+        this.progress = 0;
+        this.regressing = false;
+        this.capacity = capacity;
+        this.element = element;
+    }
+}
 
-    const survivors = [];
-    let $fragment = document.createDocumentFragment();
+const generator = [],
+      survivors = [];
+
+
+const createGenerators = () => {
+
+}
+
+const createSurvivors = () => {
+    // SURVIVOR CARDS
+
+    const $survivors = document.createElement('div');
+        $survivors.classList.add('survivors');
 
     candidates.forEach(candidate => {
 
-        let $survivor = document.createElement('div');
+        const $survivor = document.createElement('div');
             $survivor.classList.add('survivor')
 
-        let $objective = document.createElement('div'),
-            $action = document.createElement('span'),
-            $progress = document.createElement('span');
 
-        $objective.classList.add('objective')
-        $action.classList.add('action')
-        $progress.classList.add('progress')
+        /* INFO */
 
-        $action.innerHTML = "Repairing Generator"
-        $progress.innerHTML = "0%"
+            const $info = document.createElement('div')
+                  $info.classList.add('info')
 
-        $objective.appendChild($action)
-        $objective.appendChild($progress)
+            /* PORTRAIT */
+
+                const $portrait = document.createElement('div'),
+                    $portraitImg = document.createElement('img');
+
+                $portrait.classList.add('portrait')
+                $portraitImg.setAttribute('src', candidate.img)
+                $portrait.appendChild($portraitImg)
+
+            /* PORTRAIT */
+
+            /* STATUS */
+
+            const $status = document.createElement('div')
+                  $status.classList.add('status')
+
+                /* NAME */
+
+                    const $survivorName = document.createElement('div'),
+                          $nameSpan = document.createElement('span');
+
+                          $survivorName.classList.add("name");
+                          $nameSpan.innerHTML = candidate.name;
+
+                        $survivorName.appendChild($nameSpan)
+
+                /* NAME */
+
+                /* OBJECTIVE */
+
+                    const $objective = document.createElement('div'),
+                        $action = document.createElement('span'),
+                        $progressBar = document.createElement('div'),
+                        $progressBarFiller = document.createElement('div');
+
+                    $objective.classList.add('objective')
+                    $action.classList.add('action')
+                    $progressBar.classList.add('progress-bar')
+                    $progressBarFiller.classList.add('filler')
+
+                    $action.innerHTML = "Repairing Generator"
+                    $progressBar.appendChild($progressBarFiller)
+
+                    $objective.appendChild($action)
+                    $objective.appendChild($progressBar)
+
+                /* OBJECTIVE */
+
+                $status.appendChild($survivorName);
+                $status.appendChild($objective);
+
+            /* STATUS */
+
+            $info.appendChild($portrait);
+            $info.appendChild($status);
+
+        /* INFO */
+
+        /* OPTIONS */
+
+            const $options = document.createElement('div'),
+                $repair = document.createElement('button'),
+                $loop = document.createElement('button'),
+                $heal = document.createElement('button');
 
 
-        let $status = document.createElement('div'),
-            $portrait = document.createElement('img'),
-            $survivorName = document.createElement('p');
+            $options.classList.add('options')
+            $repair.classList.add('repair')
+            $repair.classList.add('btn')
+            $repair.classList.add('btn-blue')
+            $loop.classList.add('loop')
+            $loop.classList.add('btn')
+            $loop.classList.add('btn-orange')
+            $heal.classList.add('heal')
+            $heal.classList.add('btn')
+            $heal.classList.add('btn-green')
 
-        $status.classList.add('status')
-        $portrait.classList.add('portrait')
-        $survivorName.classList.add('survivor-name')
+            // $loop.setAttribute("disabled", "true")
+            // $heal.setAttribute("disabled", "true")
 
-            $portrait.setAttribute('src', candidate.img)
-            $survivorName.innerHTML = `${candidate.name} (<span class="health"></span>)`;
-        let $survivorHealth = $survivorName.querySelector('.health')
-            $survivorHealth.innerHTML = "healthy"
+            // $repair.innerHTML = "Find/Repair Generator"
+            // $loop.innerHTML = "Run/Loop Killer"
+            // $heal.innerHTML = "Heal"
 
-        $status.appendChild($portrait)
-        $status.appendChild($survivorName)
+            $options.appendChild($repair)
+            $options.appendChild($loop)
+            $options.appendChild($heal)
 
-        let $options = document.createElement('div'),
-            $repair = document.createElement('button'),
-            $loop = document.createElement('button'),
-            $heal = document.createElement('button');
-
-        $options.classList.add('options')
-        $repair.classList.add('repair')
-        $repair.classList.add('btn')
-        $repair.classList.add('btn-blue')
-        $loop.classList.add('loop')
-        $loop.classList.add('btn')
-        $loop.classList.add('btn-orange')
-        $heal.classList.add('heal')
-        $heal.classList.add('btn')
-        $heal.classList.add('btn-green')
-
-        $loop.setAttribute("disabled", "true")
-        $heal.setAttribute("disabled", "true")
-
-        $repair.innerHTML = "Find/Repair Generator"
-        $loop.innerHTML = "Run/Loop Killer"
-        $heal.innerHTML = "Heal"
-
-        $options.appendChild($repair)
-        $options.appendChild($loop)
-        $options.appendChild($heal)
+        /* OPTIONS */
+        
+        $survivor.appendChild($info);
+        $survivor.appendChild($options)
+        $survivors.appendChild($survivor)
         
 
-        $survivor.appendChild($objective);
-        $survivor.appendChild($status);
-        $survivor.appendChild($options);
-
-        $fragment.appendChild($survivor)
-
-        let survi = new Survivor(candidate.name, candidate.img, $survivor);
+        const survi = new Survivor(candidate.name, candidate.img, $survivor);
         survivors.push(survi);
     })
+
+    $fragment.appendChild($survivors)
+}
+
+let $fragment;
+
+const start = () => {
+    
+    $fragment = document.createDocumentFragment();
+
+    // MAP
+
+    let $map = document.createElement('div')
+    $map.classList.add('map')
+    $fragment.appendChild($map)
+    
+    createSurvivors();
 
     const $interface = document.querySelector('.interface')
     
     $start.style.display = "none";
 
     $interface.appendChild($fragment)
-
 }
+
 
 const $start = document.querySelector('.start')
 

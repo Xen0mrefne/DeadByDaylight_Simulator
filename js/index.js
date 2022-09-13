@@ -23,6 +23,8 @@ class Survivor {
         this.img = img;
         this.health = 2;
         this.action = "";
+        this.posX = 0;
+        this.posY = 0;
         this.element = element;
     }
 }
@@ -32,28 +34,60 @@ class Generator {
         this.progress = 0;
         this.regressing = false;
         this.capacity = capacity;
+        this.posX = 0;
+        this.posY = 0;
         this.element = element;
     }
 }
 
-const generator = [],
+let $fragment;
+
+const generators = [],
       survivors = [];
 
 
-const createGenerators = () => {
+const createGenerators = ($map) => {
 
+    $fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < 7; i++) {
+        const $generator = document.createElement('img');
+        $generator.classList.add('generator');
+        $generator.setAttribute('src', 'https://cdn-icons-png.flaticon.com/512/2061/2061956.png');
+        const gen = new Generator(4, $generator)
+        generators.push(gen);
+        $fragment.appendChild($generator)
+    }
+    
+    
+    $map.appendChild($fragment)
+    
+    let isFirst = true
+
+    generators.forEach(generator => {
+        if (isFirst) {
+            generator.element.style.top = `${($map.clientHeight / 2) - (generator.element.clientHeight / 2)}px`
+            generator.element.style.left = `${($map.clientWidth / 2) - (generator.element.clientWidth / 2)}px`
+            isFirst = false;
+        }
+    })
+
+    console.log(generators)
 }
 
-const createSurvivors = () => {
+const createSurvivors = ($interface) => {
+
+    $fragment = document.createDocumentFragment();
+
     // SURVIVOR CARDS
 
     const $survivors = document.createElement('div');
-        $survivors.classList.add('survivors');
+          $survivors.classList.add('survivors');
 
     candidates.forEach(candidate => {
 
         const $survivor = document.createElement('div');
-            $survivor.classList.add('survivor')
+              $survivor.classList.add('survivor')
 
 
         /* INFO */
@@ -64,7 +98,7 @@ const createSurvivors = () => {
             /* PORTRAIT */
 
                 const $portrait = document.createElement('div'),
-                    $portraitImg = document.createElement('img');
+                      $portraitImg = document.createElement('img');
 
                 $portrait.classList.add('portrait')
                 $portraitImg.setAttribute('src', candidate.img)
@@ -74,8 +108,8 @@ const createSurvivors = () => {
 
             /* STATUS */
 
-            const $status = document.createElement('div')
-                  $status.classList.add('status')
+                const $status = document.createElement('div')
+                      $status.classList.add('status')
 
                 /* NAME */
 
@@ -101,7 +135,7 @@ const createSurvivors = () => {
                     $progressBar.classList.add('progress-bar')
                     $progressBarFiller.classList.add('filler')
 
-                    $action.innerHTML = "Repairing Generator"
+                    $action.innerHTML = "Repairing"
                     $progressBar.appendChild($progressBarFiller)
 
                     $objective.appendChild($action)
@@ -161,27 +195,30 @@ const createSurvivors = () => {
     })
 
     $fragment.appendChild($survivors)
+    $interface.appendChild($fragment)
+
 }
 
-let $fragment;
+const initializeMap = ($map) => {
+
+    createGenerators($map);
+
+}
 
 const start = () => {
-    
-    $fragment = document.createDocumentFragment();
 
     // MAP
 
-    let $map = document.createElement('div')
+    const $map = document.createElement('div')
     $map.classList.add('map')
-    $fragment.appendChild($map)
-    
-    createSurvivors();
 
     const $interface = document.querySelector('.interface')
+    $interface.appendChild($map)
+
+    initializeMap($map);
+    createSurvivors($interface);
     
     $start.style.display = "none";
-
-    $interface.appendChild($fragment)
 }
 
 

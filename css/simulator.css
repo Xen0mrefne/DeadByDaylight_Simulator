@@ -25,9 +25,14 @@
     height: 70vh;
 }
 
+.mapSurvivor {
+    position: absolute;
+}
+
 .generator {
     position: absolute;
-    height: 50px;
+    height: 30px;
+    border: 1px solid white;
 }
 
 /* _-_- SURVIVORS -_-_ */

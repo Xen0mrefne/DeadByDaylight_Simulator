@@ -18,11 +18,15 @@ const candidates = [
 ]
 
 class Survivor {
-    constructor(name, img, element) {
-        this.name = name;
-        this.img = img;
+    constructor(element) {
         this.health = 2;
         this.action = "";
+        this.element = element;
+    }
+}
+
+class SurvivorInMap {
+    constructor(element) {
         this.posX = 0;
         this.posY = 0;
         this.element = element;
@@ -43,12 +47,15 @@ class Generator {
 let $fragment;
 
 const generators = [],
-      survivors = [];
+      survivors = [],
+      survivorsInMap = [];
 
 
-const createGenerators = ($map) => {
+const createGenerators = ($map, sectors) => {
 
     $fragment = document.createDocumentFragment();
+
+    let mapWidth = $map.clientWidth
 
     for (let i = 0; i < 7; i++) {
         const $generator = document.createElement('img');
@@ -59,20 +66,85 @@ const createGenerators = ($map) => {
         $fragment.appendChild($generator)
     }
     
-    
+    candidates.forEach(candidate => {
+        const $survivor = document.createElement('img');
+        $survivor.classList.add('mapSurvivor');
+        $survivor.setAttribute('src', candidate.img);
+        $survivor.style.width = "40px"
+        const survi = new SurvivorInMap ($survivor)
+        survivorsInMap.push(survi);
+        $fragment.appendChild($survivor)
+    })
+
+
     $map.appendChild($fragment)
+
+
+
+
+
     
     let isFirst = true
 
+    const [a1, a2, a3, b1, b2, b3, c1, c2, c3] = sectors
+
+    const availableSectors = [a1, a2, a3, b1, b3, c1, c2, c3]
+   
+
     generators.forEach(generator => {
+        let sector;
+
         if (isFirst) {
-            generator.element.style.top = `${($map.clientHeight / 2) - (generator.element.clientHeight / 2)}px`
-            generator.element.style.left = `${($map.clientWidth / 2) - (generator.element.clientWidth / 2)}px`
+            sector = b2;
             isFirst = false;
+        } else {
+
+            let num = Math.floor(Math.random() * availableSectors.length)
+
+            sector = availableSectors[num]
+            availableSectors.splice(num, 1)
+            
+        }
+
+        console.log(generator.element)
+        generator.posX = Math.ceil(Math.random() * (sector.maxX - sector.minX) + sector.minX)
+        generator.posY = Math.ceil(Math.random() * (sector.maxY - sector.minY) + sector.minY)
+        generator.element.style.left = `${(mapWidth / 100) * generator.posX}px`
+        generator.element.style.top = `${($map.clientHeight / 100) * generator.posY}px`
+        console.log('before: ' + (mapWidth / 100) * generator.posX)
+        console.log('width + gen: ' + ((mapWidth / 100) * generator.posX + generator.element.clientWidth))
+        console.log('max: ' + (mapWidth / 100) * sector.maxX)
+        if ((mapWidth / 100) * generator.posX + generator.element.clientWidth > (mapWidth / 100) * sector.maxX) {
+            generator.posX -= 10
+            generator.element.style.left = `${(mapWidth / 100) * generator.posX}px`
+            console.log('after: ' + (mapWidth / 100) * generator.posX)
+        }
+        if (($map.clientHeight / 100) * generator.posY + generator.element.clientHeight > ($map.clientHeight / 100) * sector.maxY) {
+            generator.posY -= 10
+            generator.element.style.top = `${($map.clientHeight / 100) * generator.posY}px`
         }
     })
 
-    console.log(generators)
+    survivorsInMap.forEach(survivor => {
+
+        let sector;
+        let num = Math.floor(Math.random() * availableSectors.length)
+        sector = availableSectors[num]
+
+            survivor.posX = Math.ceil(Math.random() * (sector.maxX - sector.minX) + sector.minX)
+            survivor.posY = Math.ceil(Math.random() * (sector.maxY - sector.minY) + sector.minY)
+            survivor.element.style.left = `${($map.clientWidth / 100) * survivor.posX}px`
+            survivor.element.style.top = `${($map.clientHeight / 100) * survivor.posY}px`
+            if (($map.clientWidth / 100) * survivor.posX + survivor.element.clientWidth > ($map.clientWidth / 100) * sector.maxX) {
+                survivor.posX -= 20
+                survivor.element.style.left = `${($map.clientWidth / 100) * survivor.posX}px`
+            }
+            if (($map.clientHeight / 100) * survivor.posY + survivor.element.clientHeight > ($map.clientHeight / 100) * sector.maxY) {
+                survivor.posY -= 20
+                survivor.element.style.top = `${($map.clientHeight / 100) * survivor.posY}px`
+            }
+    });
+
 }
 
 const createSurvivors = ($interface) => {
@@ -201,7 +273,22 @@ const createSurvivors = ($interface) => {
 
 const initializeMap = ($map) => {
 
-    createGenerators($map);
+    const sectors = [
+        // A
+        {minX: 0, maxX: 33.3, minY: 0, maxY: 33.3},
+        {minX: 33.3, maxX: 66.6, minY: 0, maxY: 33.3},
+        {minX: 66.6, maxX: 100, minY: 0, maxY: 33.3},
+        // B
+        {minX: 0, maxX: 33.3, minY: 33.3, maxY: 66.6},
+        {minX: 33.3, maxX: 66.6, minY: 33.3, maxY: 66.6},
+        {minX: 66.6, maxX: 100, minY: 33.3, maxY: 66.6},
+        // C
+        {minX: 0, maxX: 33.3, minY: 66.6, maxY: 100},
+        {minX: 33.3, maxX: 66.6, minY: 66.6, maxY: 100},
+        {minX: 66.6, maxX: 100, minY: 66.6, maxY: 100},
+    ]
+
+    createGenerators($map, sectors);
 
 }
 
